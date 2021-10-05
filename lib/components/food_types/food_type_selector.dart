@@ -6,9 +6,17 @@ import 'package:flutter_restaurant/utils/ui_utils.dart';
 import 'package:get/get.dart';
 
 class FoodTypeSelector extends StatefulWidget {
-  FoodTypeSelector({Key? key, this.selectedTypes = const {}, this.direction = Axis.horizontal}) : super(key: key);
+  FoodTypeSelector({
+    Key? key,
+    this.selectedTypes = const {},
+    this.direction = Axis.horizontal,
+    this.whiteChipBackground = false,
+    this.onSelect,
+  }) : super(key: key);
   final Set<String> selectedTypes;
   final Axis direction;
+  final bool whiteChipBackground;
+  final void Function(List<String>)? onSelect;
 
   @override
   FoodTypeSelectorState createState() => FoodTypeSelectorState();
@@ -36,7 +44,7 @@ class FoodTypeSelectorState extends State<FoodTypeSelector> {
   Widget _foodTypeChip(FoodType foodType) {
     final selected = selectedTypes.contains(foodType.slug!);
     return Container(
-      decoration: BoxDecoration(color: selected ? kSecondaryColor : kSecondaryColor.variants.light, borderRadius: kRoundedBorder),
+      decoration: BoxDecoration(color: selected ? kSecondaryColor : (widget.whiteChipBackground ? Colors.white : kSecondaryColor.variants.light), borderRadius: kRoundedBorder),
       padding: const EdgeInsets.symmetric(horizontal: kSpacing3, vertical: kSpacing2),
       child: Text(
         foodType.name,
@@ -45,6 +53,7 @@ class FoodTypeSelectorState extends State<FoodTypeSelector> {
     ).mouse(() {
       setState(() {
         selected ? selectedTypes.remove(foodType.slug!) : selectedTypes.add(foodType.slug!);
+        if (widget.onSelect != null) widget.onSelect!(selectedTypes.toList());
       });
     });
   }

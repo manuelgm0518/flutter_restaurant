@@ -106,7 +106,7 @@ extension WidgetUtils on Widget {
     return Container(
       alignment: Alignment.topCenter,
       child: SingleChildScrollView(
-        reverse: true,
+        //reverse: true,
         padding: padding,
         physics: kBouncyScroll,
         child: this.paddingOnly(bottom: keyboardPadding(Get.context!)),

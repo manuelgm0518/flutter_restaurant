@@ -1,3 +1,4 @@
+import 'package:flutter_restaurant/config/app_pages.dart';
 import 'package:flutter_restaurant/models/Restaurant.dart';
 import 'package:get/get.dart';
 
@@ -10,15 +11,16 @@ class SessionService extends GetxService {
 
   Future<void> userLogIn(String email) async {
     this.userEmail = email;
-    await 2.seconds.delay();
+    await 1.seconds.delay();
   }
 
   Future<void> restaurantLogIn(Restaurant restaurant) async {
     this.restaurant = restaurant;
-    await 2.seconds.delay();
+    await 1.seconds.delay();
   }
 
   Future<void> logOut() async {
+    await Get.offAllNamed(AppRoutes.ACCESS);
     restaurant = null;
     userEmail = null;
   }

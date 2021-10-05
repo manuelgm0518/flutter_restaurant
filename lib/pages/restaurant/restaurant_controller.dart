@@ -1,4 +1,3 @@
-import 'package:flutter_restaurant/config/app_pages.dart';
 import 'package:flutter_restaurant/models/Restaurant.dart';
 import 'package:flutter_restaurant/providers/restaurants_provider.dart';
 import 'package:flutter_restaurant/services/session_service.dart';
@@ -16,11 +15,6 @@ class RestaurantController extends GetxController with StateMixin<Restaurant> {
     }, onError: (err) {
       change(null, status: RxStatus.error(err.toString()));
     });
-  }
-
-  Future<void> logOut() async {
-    await Get.offAllNamed(AppRoutes.ACCESS);
-    SessionService.to.logOut();
   }
 
   @override

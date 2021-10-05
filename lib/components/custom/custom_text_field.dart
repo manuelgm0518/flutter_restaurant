@@ -12,6 +12,8 @@ class CustomTextField extends StatefulWidget {
     this.suffix,
     this.keyboardType,
     this.validator,
+    this.whiteBackground = false,
+    this.textArea = false,
   }) : super(key: key);
 
   final TextEditingController? controller;
@@ -19,6 +21,8 @@ class CustomTextField extends StatefulWidget {
   final Widget? prefix;
   final Widget? suffix;
   final TextInputType? keyboardType;
+  final bool whiteBackground;
+  final bool textArea;
   final String? Function(String?)? validator;
 
   @override
@@ -34,7 +38,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Color get themePrimary => Get.theme.colorScheme.primary;
   Color get themeSecondary => Get.theme.colorScheme.secondary;
   Color get textColor => focused ? themePrimary : themeSecondary;
-  Color get backgroundColor => focused ? themePrimary.variants.light : themeSecondary.variants.light;
+  Color get backgroundColor => focused ? themePrimary.variants.light : (widget.whiteBackground ? Colors.white : themeSecondary.variants.light);
   Widget? iconTheme(Widget? widget) => widget != null ? IconTheme(data: IconThemeData(color: textColor, size: 20), child: widget) : null;
 
   @override
@@ -45,9 +49,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
         onFocusChange: (value) => _onFocusChange(value),
         child: TextFormField(
           controller: widget.controller,
-          keyboardType: widget.keyboardType,
+          keyboardType: widget.textArea ? TextInputType.multiline : widget.keyboardType,
           validator: widget.validator,
           style: Get.textTheme.bodyText2?.copyWith(color: Colors.black),
+          maxLines: widget.textArea ? null : 1,
+          //expands: widget.textArea,
           decoration: InputDecoration(
             fillColor: backgroundColor,
             labelStyle: Get.textTheme.subtitle1?.copyWith(color: textColor),

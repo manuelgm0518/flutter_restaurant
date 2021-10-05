@@ -6,8 +6,12 @@ import 'package:flutter_restaurant/utils/ui_utils.dart';
 import 'package:get/get.dart';
 
 class FoodTypeList extends StatefulWidget {
-  FoodTypeList(this.slugs, {Key? key}) : super(key: key);
+  FoodTypeList(this.slugs, {Key? key, this.scrollable = false, this.backgroundColor = kSecondaryColor, this.textColor = Colors.white, this.small = false}) : super(key: key);
   final List<String> slugs;
+  final bool scrollable;
+  final bool small;
+  final Color backgroundColor;
+  final Color textColor;
 
   @override
   _FoodTypeListState createState() => _FoodTypeListState();
@@ -34,50 +38,40 @@ class _FoodTypeListState extends State<FoodTypeList> {
     super.initState();
   }
 
+  Widget _foodTypeChip(FoodType foodType) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: widget.small ? kSpacing2 : kSpacing3, vertical: widget.small ? kSpacing1 : kSpacing2),
+      decoration: BoxDecoration(color: widget.backgroundColor, borderRadius: kRoundedBorder),
+      //alignment: Alignment.center,
+      child: Text(foodType.name, style: (widget.small ? Get.textTheme.caption : Get.textTheme.bodyText2)?.copyWith(color: widget.textColor)),
+    );
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return loading
         ? CircularProgressIndicator().centered()
-        : ListView.builder(
-            padding: kPaddingX5,
-            scrollDirection: Axis.horizontal,
-            itemCount: foodTypeList.length,
-            physics: kBouncyScroll,
-            itemBuilder: (context, index) {
-              final foodType = foodTypeList[index];
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: kSpacing3, vertical: kSpacing2),
-                decoration: BoxDecoration(color: kSecondaryColor, borderRadius: kRoundedBorder),
-                alignment: Alignment.center,
-                child: Text(foodType.name, style: Get.textTheme.bodyText2?.copyWith(color: Colors.white)),
-              ).px1;
-            }).height(30);
-
-    // : foodTypeList.isEmpty
-    //     ? Text('No hay resultados', style: Get.textTheme.bodyText2?.copyWith(color: kDarkColor), textAlign: TextAlign.center).left([
-    //         IconButton(
-    //           icon: Icon(UniconsLine.sync_icon),
-    //           color: kDarkColor,
-    //           onPressed: () => fetchData(),
-    //         ),
-    //       ]).centered()
-    // : Row(
-    //     mainAxisAlignment: MainAxisAlignment.start,
-    //     //mainAxisSize: MainAxisSize.min,
-    //     children: foodTypeList.map(
-    //       (foodType) {
-    //         return Container(
-    //           padding: const EdgeInsets.symmetric(horizontal: kSpacing3, vertical: kSpacing2),
-    //           decoration: BoxDecoration(
-    //             color: kSecondaryColor,
-    //             //border: Border.all(width: 2, color: kSecondaryColor.variants.light),
-    //             borderRadius: kRoundedBorder,
-    //           ),
-    //           alignment: Alignment.center,
-    //           child: Text(foodType.name, style: Get.textTheme.bodyText2?.copyWith(color: Colors.white)),
-    //         ).pr3;
-    //       },
-    //     ).toList(),
-    //   ).scrollable(padding: kPaddingX5);
+        : widget.scrollable
+            ? ListView.builder(
+                padding: kPaddingX5,
+                scrollDirection: Axis.horizontal,
+                itemCount: foodTypeList.length,
+                physics: kBouncyScroll,
+                itemBuilder: (context, index) {
+                  final foodType = foodTypeList[index];
+                  return _foodTypeChip(foodType).px1;
+                }).height(30)
+            : Wrap(
+                children: foodTypeList.map((e) => _foodTypeChip(e)).toList(),
+                spacing: kSpacing,
+                runSpacing: kSpacing2,
+              );
   }
 }

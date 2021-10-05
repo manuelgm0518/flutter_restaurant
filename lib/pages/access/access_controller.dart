@@ -18,8 +18,8 @@ class AccessController extends GetxController with SingleGetTickerProviderMixin,
   var selectedRestaurantIndex = (-1).obs;
 
   Future<void> userLogIn() async {
-    buttonStatus.currentState?.setStatus(CustomButtonStatus.LOADING);
     if (userForm.currentState?.validate() ?? false) {
+      buttonStatus.currentState?.setStatus(CustomButtonStatus.LOADING);
       await SessionService.to.userLogIn(userEmailField.text);
       Get.offAllNamed(AppRoutes.HOME);
     }
@@ -28,7 +28,7 @@ class AccessController extends GetxController with SingleGetTickerProviderMixin,
   Future<void> restaurantLogIn() async {
     buttonStatus.currentState?.setStatus(CustomButtonStatus.LOADING);
     final restaurant = state![selectedRestaurantIndex.value];
-    await SessionService.to.restaurantLogIn(restaurant);
+    SessionService.to.restaurantLogIn(restaurant);
     Get.offAllNamed(AppRoutes.RESTAURANT(restaurant.slug));
   }
 
